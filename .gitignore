@@ -1,0 +1,8 @@
+out/
+node_modules/
+entry-300px.png
+kit/
+kit-download.tar.gz
+photos/
+compose.py
+HEARTBEAT.md
