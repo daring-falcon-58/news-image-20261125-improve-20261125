@@ -4,12 +4,15 @@
 // runs write the same bytes. Run it with:
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 
-import { copyFileSync, mkdirSync } from 'node:fs';
+import { copyFileSync, mkdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 mkdirSync(outDir, { recursive: true });
-copyFileSync(
-  new URL('./entry.png', import.meta.url),
-  join(outDir, 'entry.png'),
-);
+const src = new URL('./entry.png', import.meta.url);
+const dest = join(outDir, 'entry.png');
+copyFileSync(src, dest);
+// Write-back self-check: the output must be byte-identical to the source.
+if (!readFileSync(dest).equals(readFileSync(src))) {
+  throw new Error('entry.png copy mismatch: output bytes differ from source');
+}
